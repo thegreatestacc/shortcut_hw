@@ -1,0 +1,33 @@
+# Go build artifacts
+/bin/
+/dist/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Go workspace and coverage output
+go.work
+go.work.sum
+coverage.out
+coverage.html
+*.coverprofile
+
+# IDE/editor local files
+/.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Local environment files
+.env
+.env.*
+!.env.example
