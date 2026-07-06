@@ -1,0 +1,38 @@
+package default_woker_pool
+
+import (
+	"fmt"
+	"sync"
+)
+
+const (
+	workersCount = 3
+	jobsChanSize = 5
+	jobsCount    = 5
+)
+
+func RunWorkerPool() {
+	var wg sync.WaitGroup
+	jobs := make(chan int, jobsChanSize)
+	results := make(chan int, jobsChanSize)
+
+	go ProduceTask(jobs, jobsCount)
+
+	fmt.Printf("Worker pool started generate workers...\n")
+	for workerID := 0; workerID < workersCount; workerID++ {
+		wg.Add(1)
+		fmt.Printf("Worker %d starting...\n", workerID)
+		go ProcessJobs(jobs, results, &wg)
+	}
+
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
+
+	for result := range results {
+		fmt.Printf("Result is %d \n", result)
+	}
+
+	fmt.Printf("Worker pool finished.\n")
+}
