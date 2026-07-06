@@ -6,11 +6,14 @@ import (
 )
 
 // Процессор обрабатывает задачи простейшим инкрементом.
-func ProcessJobs(jobs <-chan int, results chan<- int, wg *sync.WaitGroup) {
+func ProcessJobs(workerID int, jobs <-chan int, results chan<- int, wg *sync.WaitGroup, statistics *Statistics) {
 	defer wg.Done()
 	for job := range jobs {
 		fmt.Printf("Processing job %d\n", job)
 		job += 1
 		results <- job
+
+		// добавлен подсчет статистики по второй задаче
+		statistics.IncrementProcessed(workerID)
 	}
 }

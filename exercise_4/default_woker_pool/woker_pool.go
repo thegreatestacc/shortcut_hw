@@ -16,13 +16,15 @@ func RunWorkerPool() {
 	jobs := make(chan int, jobsChanSize)
 	results := make(chan int, jobsChanSize)
 
+	statistics := NewStatistics()
+
 	go ProduceTask(jobs, jobsCount)
 
 	fmt.Printf("Worker pool started generate workers...\n")
 	for workerID := 0; workerID < workersCount; workerID++ {
 		wg.Add(1)
 		fmt.Printf("Worker %d starting...\n", workerID)
-		go ProcessJobs(jobs, results, &wg)
+		go ProcessJobs(workerID, jobs, results, &wg, statistics)
 	}
 
 	go func() {
@@ -34,5 +36,6 @@ func RunWorkerPool() {
 		fmt.Printf("Result is %d \n", result)
 	}
 
+	statistics.Print()
 	fmt.Printf("Worker pool finished.\n")
 }
