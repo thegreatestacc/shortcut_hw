@@ -1,4 +1,4 @@
-package default_woker_pool
+package main
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ type Statistics struct {
 	mu                 sync.Mutex
 	panicsCounter      int
 	failedTasksCounter int
-	// workerID to successful tasks
+	// workerID to count of successful tasks
 	processed map[int]int
 }
 
