@@ -18,7 +18,7 @@ func RunWorkerPool() {
 	results := make(chan int, jobsChanSize)
 
 	statistics := NewStatistics()
-	semaphore := make(chan struct{}, semaphoreSize)
+	semaphore := NewSemaphore(semaphoreSize)
 
 	go ProduceTask(jobs, jobsCount)
 

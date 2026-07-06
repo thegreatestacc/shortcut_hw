@@ -13,18 +13,18 @@ func ProcessJobs(
 	results chan<- int,
 	wg *sync.WaitGroup,
 	statistics *Statistics,
-	semaphore chan struct{},
+	semaphore *Semaphore,
 ) {
 	defer wg.Done()
 	for job := range jobs {
 		fmt.Printf("Processing job %d\n", job)
 
 		// добавлен семафор. инкрементируем счетчик
-		semaphore <- struct{}{}
+		semaphore.Acquire()
 		// имитация обработки задачи
 		result := callExternalService(job)
 		// после обработки задачи, уменьшаем счетчик семафора
-		<-semaphore
+		semaphore.Release()
 		results <- result
 
 		// добавлен подсчет статистики по второй задаче
